@@ -1,5 +1,6 @@
 import pyttsx3
 import speech_recognition as sr
+import eel
 
 def speak(text):
     engine = pyttsx3.init('sapi5')  # Initialize TTS engine
@@ -12,20 +13,28 @@ def speak(text):
     engine.say(text)  # Queue the text to be spoken
     engine.runAndWait()  # Speak the queued text
 
+@eel.expose
 def take_command():
     recognizer = sr.Recognizer()
 
     with sr.Microphone() as source:
         print("Listening...")
+        eel.DisplayMessage("Listening...")
         recognizer.pause_threshold = 1  # Adjust silence threshold
         recognizer.adjust_for_ambient_noise(source)  # Calibrate to ambient noise
         
         try:
             audio = recognizer.listen(source, timeout=10, phrase_time_limit=30)  # Capture audio, phrase_time_limit lee chai within 60 second vitra ko kura listin gar x yo vand dheari gardai na,and  timeout le system o va ko 10 secconbhitra bole na vane off hu xa
-            print("Recognizing...")
+            print("Recognizing...") 
+            eel.DisplayMessage("Recognizing...")#used to display in frontend by calling displaymessag() from conrtol.js
             query = recognizer.recognize_google(audio, language='en-in')  # Use Google recognizer
             print(f"User said: {query}")  # Print the recognized text
+            eel.DisplayMessage(query)#used to display in frontend by calling displaymessag() from conrtol.js
+            speak(query)
+            eel.ShowHood() #callig fun that go back to home page
             return query.lower()  # Return in lowercase for consistency
+            
+            
         except sr.WaitTimeoutError:
             print("Timeout! No speech detected.")
             return ""
@@ -36,9 +45,5 @@ def take_command():
             print(f"Could not request results; {e}")
             return ""
 
-# Main logic
-text = take_command()  # Capture user speech
-if text:  # If speech is recognized
-    speak(text)  # Speak it back
-else:
-    speak("Sorry, I didn't catch that. Please try again.")
+
+
