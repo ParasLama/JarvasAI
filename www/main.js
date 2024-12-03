@@ -54,7 +54,7 @@ $(document).ready(function () {
         $("#Oval").attr("hidden", true);
         //step2;  and the siriwave is false that mean no open seripage
         $("#SiriWave").attr("hidden", false);
-        eel.take_command()()   //calling t command
+        eel.all_command()()   //calling t command
         
 
      });//step3; after clicking the MicBtn then the oval=fals and siriswave= ture 
